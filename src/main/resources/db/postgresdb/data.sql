@@ -1,7 +1,6 @@
-INSERT INTO vets VALUES (1, 'James');
-INSERT INTO vets VALUES (2, 'Helen');
-INSERT INTO vets VALUES (3, 'Linda');
-INSERT INTO vets VALUES (4, 'Rafael');
-INSERT INTO vets VALUES (5, 'Henry');
-INSERT INTO vets VALUES (6, 'Sharon');
-
+INSERT INTO customers VALUES (1, 'James',2);
+INSERT INTO customers VALUES (2, 'Helen',3);
+INSERT INTO customers VALUES (3, 'Linda',4);
+INSERT INTO customers VALUES (4, 'Rafael',5);
+INSERT INTO customers VALUES (5, 'Henry',6);
+INSERT INTO customers VALUES (6, 'Sharon',7);

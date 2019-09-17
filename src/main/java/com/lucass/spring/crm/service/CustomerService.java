@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService implements ICustomerService{
-    @Autowired
-    private CustomerRepository repository;
-
-    @Override public List<Customer> findAll() {
-        List<Customer> list = (List<Customer>) repository.findAll();
-        return list;
-    }
-
-    @Override public void addCustomer(Customer customer) {
-        repository.save(customer);
-    }
+//    @Autowired
+//    private CustomerRepository repository;
+//
+//    @Override public List<Customer> findAll() {
+//        List<Customer> list = (List<Customer>) repository.findAll();
+//        return list;
+//    }
+//
+//    @Override public void addCustomer(Customer customer) {
+//        repository.save(customer);
+//    }
 }

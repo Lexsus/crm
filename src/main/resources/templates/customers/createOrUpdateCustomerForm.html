@@ -3,26 +3,21 @@
 
 <body>
 
-  <h2>Owner</h2>
+  <h2>Customer</h2>
   <form th:object="${customer}" class="form-horizontal" id="add-customer-form" method="post">
     <div class="form-group has-feedback">
       <input
-        th:replace="~{fragments/inputField :: input ('First Name', 'firstName', 'text')}" />
-      <input
-        th:replace="~{fragments/inputField :: input ('Last Name', 'lastName', 'text')}" />
-      <input
-        th:replace="~{fragments/inputField :: input ('Address', 'address', 'text')}" />
-      <input
-        th:replace="~{fragments/inputField :: input ('City', 'city', 'text')}" />
-      <input
-        th:replace="~{fragments/inputField :: input ('Telephone', 'telephone', 'text')}" />
+        th:replace="~{fragments/inputField :: input ('First Name', 'name', 'text')}" />
+    </div>
+    <input
+            th:replace="~{fragments/inputField :: input ('count', 'count', 'text')}" />
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <button
-          th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
+          th:with="text=${customer['new']} ? 'Add Customer' : 'Update Customer'"
           class="btn btn-default" type="submit" th:text="${text}">Add
-          Owner</button>
+          Customer</button>
       </div>
     </div>
   </form>

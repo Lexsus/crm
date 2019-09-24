@@ -12,7 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface  CustomerRepository extends CrudRepository<Customer, Long> {
 
-    @Query("SELECT customer FROM Customer customer WHERE name ='Ivanov'")
+    @Query("SELECT customer FROM Customer customer WHERE customer.name LIKE :name%")
     @Transactional(readOnly = true)
     Collection<Customer> findByName(@Param("name") String name);
+
+    @Query("SELECT customer FROM Customer customer WHERE customer.id =:id")
+    @Transactional(readOnly = true)
+    Customer findById(@Param("id") Integer id);
 }

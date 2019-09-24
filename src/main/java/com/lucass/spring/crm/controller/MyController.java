@@ -8,27 +8,26 @@ import javax.validation.Valid;
 
 import com.lucass.spring.crm.model.Customer;
 import com.lucass.spring.crm.repository.CustomerRepository;
-import com.lucass.spring.crm.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 //@RestController
 public class MyController {
     private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "customers/createOrUpdateCustomerForm";
     @Autowired
-    private CustomerRepository customerService;
+    private CustomerRepository customers;
 
     @GetMapping("/showCustomers")
     public String findCustomers(Model model) {
 
-        List<Customer> customers= (List<Customer>) customerService.findAll();
+        List<Customer> customers= (List<Customer>) this.customers.findAll();
 
         model.addAttribute("customers", customers);
 
@@ -53,39 +52,70 @@ public class MyController {
         if (result.hasErrors()) {
             return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
         } else {
-            return "redirect:/owners/" + customer.getId();
+            return "redirect:/customers/" + customer.getId();
         }
     }
     //    @RequestMapping("/")
 //    public String index()
 //    {
-//        List<Customer> customers= (List<Customer>) customerService.findAll();
+//        List<Customer> customers= (List<Customer>) customers.findAll();
 //        String text = String.format("Hello I work in Spring Boot %d",customers.size());
 //        return text;
 //    }
-    @GetMapping("/owners")
-    public String processFindForm(Customer owner, BindingResult result, Map<String, Object> model) {
+    @GetMapping("/customers")
+    public String processFindForm(Customer customer, BindingResult result, Map<String, Object> model) {
 
         // allow parameterless GET request for /owners to return all records
-        if (owner.getName() == null) {
-            owner.setName(""); // empty string signifies broadest possible search
+        if (customer.getName() == null) {
+            customer.setName(""); // empty string signifies broadest possible search
         }
 
         // find owners by last name
-        Collection<Customer> results = this.customerService.findByName(owner.getName());
+        Collection<Customer> results = this.customers.findByName(customer.getName());
         if (results.isEmpty()) {
             // no owners found
-            result.rejectValue("lastName", "notFound", "not found");
-            return "owners/findOwners";
+            result.rejectValue("name", "notFound", "not found");
+            return "customers/findCustomers";
         } else if (results.size() == 1) {
             // 1 owner found
-            owner = results.iterator().next();
-            return "redirect:/owners/" + owner.getId();
+            customer = results.iterator().next();
+            return "redirect:/customers/" + customer.getId();
         } else {
             // multiple owners found
             model.put("selections", results);
-            return "owners/ownersList";
+            return "customers/customersList";
         }
+    }
+
+    @GetMapping("/customers/{customerId}/edit")
+    public String initUpdateOwnerForm(@PathVariable("customerId") int customerId, Model model) {
+        Customer owner = this.customers.findById(customerId);
+        model.addAttribute(owner);
+        return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+    }
+
+    @PostMapping("/customers/{customerId}/edit")
+    public String processUpdateOwnerForm(@Valid Customer customer, BindingResult result, @PathVariable("customerId") int customerId) {
+        if (result.hasErrors()) {
+            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+        } else {
+            customer.setId(customerId);
+            this.customers.save(customer);
+            return "redirect:/customers/{customerId}";
+        }
+    }
+
+    /**
+     * Custom handler for displaying an owner.
+     *
+     * @param customerId the ID of the customer to display
+     * @return a ModelMap with the model attributes for the view
+     */
+    @GetMapping("/customers/{customerId}")
+    public ModelAndView showOwner(@PathVariable("customerId") int customerId) {
+        ModelAndView mav = new ModelAndView("customers/customerDetails");
+        mav.addObject(this.customers.findById(customerId));
+        return mav;
     }
 
 }

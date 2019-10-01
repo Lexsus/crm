@@ -52,9 +52,13 @@ public class MyController {
         if (result.hasErrors()) {
             return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
         } else {
+            this.customers.save(customer);
             return "redirect:/customers/" + customer.getId();
         }
     }
+
+
+
     //    @RequestMapping("/")
 //    public String index()
 //    {
@@ -89,8 +93,8 @@ public class MyController {
 
     @GetMapping("/customers/{customerId}/edit")
     public String initUpdateOwnerForm(@PathVariable("customerId") int customerId, Model model) {
-        Customer owner = this.customers.findById(customerId);
-        model.addAttribute(owner);
+        Customer customer = this.customers.findById(customerId);
+        model.addAttribute(customer);
         return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
     }
 
